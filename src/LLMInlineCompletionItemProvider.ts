@@ -9,7 +9,7 @@ export class LLMInlineCompletionItemProvider implements vscode.InlineCompletionI
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
         const completionItems: vscode.InlineCompletionItem[] = [];
         const textUpToCursor = document.getText(new vscode.Range(new vscode.Position(0, 0), position));
-        const LLM_API_URL = 'http://localhost:8002/test_api';
+        const LLM_API_URL = 'http://localhost:8002/autocomplete';
         
         try {
             const response = await fetch(LLM_API_URL, {
