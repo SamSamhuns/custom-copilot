@@ -33,7 +33,42 @@
         "command": "custom-copilot.uploadFiles",
         "title": "Custom Copilot: Upload Files"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "custom-copilot",
+      "properties": {
+        "custom-copilot.autocompleteModel": {
+          "type": "string",
+          "default": "starcoder2-3b",
+          "description": "Model used for autocomplete feature"
+        },
+        "custom-copilot.uploadAPIURL": {
+          "type": "string",
+          "default": "http://localhost:8002/upload",
+          "description": "URL for the upload API"
+        },
+        "custom-copilot.autocompleteAPIURL": {
+          "type": "string",
+          "default": "http://localhost:8002/autocomplete",
+          "description": "URL for the autocomplete API"
+        },
+        "custom-copilot.autocompleteDelay": {
+          "type": "integer",
+          "default": 1000,
+          "description": "Delay in milliseconds for autocomplete"
+        },
+        "custom-copilot.autocompleteInputPromptSize": {
+          "type": "integer",
+          "default": 500,
+          "description": "Input prompt size for autocomplete"
+        },
+        "custom-copilot.autocompleteInputMaxNewTokens": {
+          "type": "integer",
+          "default": 75,
+          "description": "Maximum new tokens for autocomplete input"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
