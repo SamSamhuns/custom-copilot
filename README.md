@@ -1,20 +1,34 @@
 # custom-copilot README
 
-This is the README for your extension "custom-copilot". After writing up a brief description, we recommend including the following sections.
+Custom copilot for autocomplete functionality in your code with custom llm endpoints.
+
+- [custom-copilot README](#custom-copilot-readme)
+  - [Features](#features)
+  - [Requirements](#requirements)
+    - [Setting up Python Flask webserver for hosting API](#setting-up-python-flask-webserver-for-hosting-api)
+  - [Extension Settings](#extension-settings)
+  - [Extension File Structure](#extension-file-structure)
+  - [Get up and running straight away](#get-up-and-running-straight-away)
+  - [Make changes](#make-changes)
+  - [Run tests](#run-tests)
+  - [Extension guidelines](#extension-guidelines)
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+-  Code Completion
+-  Chat with LLM after sending files
 
-For example if there is an image subfolder under your extension project workspace:
+<!-- \!\[feature X\]\(images/feature-x.png\) -->
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+<!-- > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow. -->
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Instructions for setting up the developer workspace available at <https://code.visualstudio.com/api/get-started/your-first-extension>.
+
+### Setting up Python Flask webserver for hosting API
+
+Instructions at [Flask webserver readme](flask_server/README.md)
 
 ## Extension Settings
 
@@ -24,8 +38,12 @@ For example:
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `autocompleteModel`: LLM_MODEL_NAME,
+* `uploadAPIURL`: UPLOAD_API_ENDPOINT,
+* `autocompleteAPIURL`: AUTOCOMPLETE_API_ENDPOINT,
+* `autocompleteDelay`: AUTOCOMPLETE_DELAY, // in milliseconds
+* `autocompleteInputPromptSize`: AUTOCOMPLETE_MAX_INPUT_PROMPT_SIZE, // doubled when using fill_in_middle models
+* `autocompleteInputMaxNewTokens`: AUTOCOMPLETE_MAX_OUTPUT_TOKEN_SIZE
 
 ## Extension File Structure
 

@@ -28,7 +28,7 @@ export const settings: Settings = {
     uploadAPIURL: 'http://localhost:8002/upload',
     autocompleteAPIURL: 'http://localhost:8002/autocomplete',
     autocompleteDelay: 1000, // in milliseconds
-    autocompleteInputPromptSize: 500,
+    autocompleteInputPromptSize: 500, // doubled when using fill_in_middle models
     autocompleteInputMaxNewTokens: 50
 };
 
