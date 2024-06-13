@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
-import { config, availableLLMModels } from './config';
+import { availableLLMModels } from './settings';
 
+// get vscode configuration
+const config = vscode.workspace.getConfiguration("custom-copilot");
 
 type ApiResponse = {
     results: Array<{ text: string }>;

@@ -3,11 +3,14 @@
 import * as vscode from 'vscode';
 import { LLMInlineCompletionItemProvider } from "./LLMInlineCompletionItemProvider";
 import { uploadFolderToAPI, uploadFilesToAPI } from "./apiHandler";
-
+import { registerSettings } from "./settings";
 
 // The extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	// The commandId parameter must match the command field in package.json
+
+	// register confs from settings.json into the vscode workspace. Need to rebuild for new settings to work
+	registerSettings();
 
 	// This line of code will only be executed once when your extension is activated
 	console.log('Extension "custom-copilot" is now active');

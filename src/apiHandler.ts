@@ -1,10 +1,12 @@
 // apiHandler.ts
 import * as vscode from 'vscode';
-import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import axios from 'axios';
 import FormData from 'form-data';
-import { config } from './config';
+
+// get vscode configuration
+const config = vscode.workspace.getConfiguration("custom-copilot");
 
 
 export async function uploadFilesToAPI(uris: vscode.Uri[]) {
