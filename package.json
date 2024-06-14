@@ -32,20 +32,29 @@
       {
         "command": "custom-copilot.uploadFiles",
         "title": "Custom Copilot: Upload Files"
+      },
+      {
+        "command": "custom-copilot.chatWithLLM",
+        "title": "Custom Copilot: Chat File with LLM"
       }
     ],
     "configuration": {
       "title": "custom-copilot",
       "properties": {
-        "custom-copilot.autocompleteModel": {
-          "type": "string",
-          "default": "starcoder2-3b",
-          "description": "Model used for autocomplete feature"
-        },
         "custom-copilot.uploadAPIURL": {
           "type": "string",
           "default": "http://localhost:8002/upload",
           "description": "URL for the upload API"
+        },
+        "custom-copilot.chatWithLLMAPIURL": {
+          "type": "string",
+          "default": "http://localhost:8002/chat",
+          "description": "URL for the Chat with File API"
+        },
+        "custom-copilot.autocompleteModel": {
+          "type": "string",
+          "default": "starcoder2-3b",
+          "description": "Model used for autocomplete feature"
         },
         "custom-copilot.autocompleteAPIURL": {
           "type": "string",

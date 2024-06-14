@@ -1,9 +1,11 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+// main extension file
 import * as vscode from 'vscode';
 import { LLMInlineCompletionItemProvider } from "./LLMInlineCompletionItemProvider";
 import { uploadFolderToAPI, uploadFilesToAPI } from "./apiHandler";
+import { LLMCommunicator } from "./LLMChatProvider";
 import { registerSettings } from "./settings";
+import { getWebviewContent } from "./webviews/viewProvider";
+
 
 // The extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -54,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// command to send folder to api
+	// Command to send folder to api
 	let uploadFolder = vscode.commands.registerCommand('custom-copilot.uploadFolder', async () => {
 		const options: vscode.OpenDialogOptions = {
 			canSelectMany: false,
@@ -71,6 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// Command to send file(s) to api
 	let uploadFiles = vscode.commands.registerCommand('custom-copilot.uploadFiles', async () => {
 		const uris = await vscode.window.showOpenDialog({
 			openLabel: 'Upload',
@@ -84,10 +87,45 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// Command to chat after uploading file with LLM
+	let chatWithLLM = vscode.commands.registerCommand('custom-copilot.chatWithLLM', () => {
+		const panel = vscode.window.createWebviewPanel(
+			'chatWithLLM', // Type identifier for internal use
+			'Chat with LLM', // Title of the panel displayed to the user
+			vscode.ViewColumn.One, // Shows the webview in the first column
+			{
+				enableScripts: true, // Allow scripts for interactive content
+				retainContextWhenHidden: true // Keep the state of the webview when switching tabs
+			}
+		);
+
+		panel.webview.html = getWebviewContent(panel.webview, context.extensionUri);
+
+		panel.webview.onDidReceiveMessage(
+			async message => {
+				switch (message.command) {
+					case 'send':
+						const response = await LLMCommunicator.send(message.text);
+						console.log("Response from LLM:", response);
+						try {
+							const response = await LLMCommunicator.send(message.text);
+							panel.webview.postMessage({ command: 'response', text: response });
+						} catch (error) {
+							console.error("Failed to send message to LLM:", error);
+							panel.webview.postMessage({ command: 'response', text: "Error communicating with LLM." });
+						}
+						break;
+				}
+			},
+			undefined,
+			context.subscriptions
+		);
+	});
+
 	// Subscription to ensure they are disposed when the extension is deactivated
 	context.subscriptions.push(displayCurrentTime, 
 		activateCompletionProvider, deactivateCompletionProvider,
-		uploadFolder, uploadFiles);
+		uploadFolder, uploadFiles, chatWithLLM);
 }
 
 // This method is called when your extension is deactivated
