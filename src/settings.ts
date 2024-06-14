@@ -3,8 +3,9 @@ import * as vscode from 'vscode';
 
 // Settings interface
 interface Settings {
-    autocompleteModel: string;
     uploadAPIURL: string;
+    chatWithLLMAPIURL: string;
+    autocompleteModel: string;
     autocompleteAPIURL: string;
     autocompleteDelay: number;
     autocompleteInputPromptSize: number;
@@ -24,10 +25,11 @@ export const availableLLMModels: ModelCapabilities = {
 };
 
 export const settings: Settings = {
-    autocompleteModel: 'starcoder2-3b',
     uploadAPIURL: 'http://localhost:8002/upload',
+    chatWithLLMAPIURL: 'http://localhost:8002/chat',
+    autocompleteModel: 'starcoder2-3b',
     autocompleteAPIURL: 'http://localhost:8002/autocomplete',
-    autocompleteDelay: 1000, // in milliseconds
+    autocompleteDelay: 1500, // in milliseconds
     autocompleteInputPromptSize: 500, // doubled when using fill_in_middle models
     autocompleteInputMaxNewTokens: 50
 };

@@ -1,0 +1,30 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: var(--vscode-font-family);
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.input-box {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+}
+
+input[type="text"],
+input[type="file"] {
+    flex: 1;
+    margin-right: 5px;
+}
