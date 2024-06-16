@@ -46,10 +46,15 @@
           "default": "http://localhost:8002/upload",
           "description": "URL for the upload API"
         },
+        "custom-copilot.chatWithLLMModel": {
+          "type": "string",
+          "default": "gpt-3.5-turbo-0125",
+          "description": "Model for Chat with LLM API"
+        },
         "custom-copilot.chatWithLLMAPIURL": {
           "type": "string",
           "default": "http://localhost:8002/chat",
-          "description": "URL for the Chat with File API"
+          "description": "URL for Chat with LLM API"
         },
         "custom-copilot.autocompleteModel": {
           "type": "string",
