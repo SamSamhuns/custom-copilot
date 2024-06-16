@@ -1,16 +1,34 @@
-// Chat with LLM
 import * as vscode from 'vscode';
+
 
 // get vscode configuration
 const config = vscode.workspace.getConfiguration("custom-copilot");
 
-
 export class LLMCommunicator {
     static async send(message: string): Promise<string> {
-        // Example: POST request to your LLM API
-        // You would replace this with actual code to send a request to your API
-        // console.log("Message should be sent to url", config.chatWithLLMAPIURL);
-        console.log("Message sent to LLM:", message);
-        return "Response from LLM: [Your response here]";
+        let prompt: string = message;
+        try {
+            const response = await fetch(config.chatWithLLMAPIURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, model: config.chatWithLLMModel })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Assert the type of the JSON response
+            const data = await response.json() as { response?: string };
+            if (data && data.response) {
+                return data.response;
+            } else {
+                console.error('No response in data:', data);
+                return "No valid response received";
+            }
+        } catch (err) {
+            console.error('Error while calling LLM API:', err);
+            return "Error in communication";
+        }
     }
 }
