@@ -31,8 +31,8 @@ function sendMessage() {
         const combinedMessages = [];
         const maxLen = Math.max(userMessages.length, llmResponses.length);
         for (let i = 0; i < maxLen; i++) {
-            if (userMessages[i]) {combinedMessages.push('You: ' + userMessages[i]);};
-            if (llmResponses[i]) {combinedMessages.push('LLM: ' + llmResponses[i]);};
+            if (userMessages[i]) { combinedMessages.push('You: ' + userMessages[i] + '<chat_sep>');};
+            if (llmResponses[i]) { combinedMessages.push('LLM: ' + llmResponses[i] + '<chat_sep>');};
         }
         combinedMessages.push('You: ' + text); // Add current message
         vscode.postMessage({ command: 'send', text: combinedMessages.join('\\n') }); // Send combined messages
