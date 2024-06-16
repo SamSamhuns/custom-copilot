@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 // Settings interface
 interface Settings {
     uploadAPIURL: string;
+    chatWithLLMModel: string;
     chatWithLLMAPIURL: string;
     autocompleteModel: string;
     autocompleteAPIURL: string;
@@ -26,6 +27,7 @@ export const availableLLMModels: ModelCapabilities = {
 
 export const settings: Settings = {
     uploadAPIURL: 'http://localhost:8002/upload',
+    chatWithLLMModel: 'gpt-3.5-turbo-0125',
     chatWithLLMAPIURL: 'http://localhost:8002/chat',
     autocompleteModel: 'starcoder2-3b',
     autocompleteAPIURL: 'http://localhost:8002/autocomplete',
