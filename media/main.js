@@ -1,6 +1,8 @@
 const vscode = acquireVsCodeApi();
 let userMessages = [];
 let llmResponses = [];
+const SEP_TOKEN = '<CHAT_SEP>';
+
 
 function handleEnter(event) {
     if (event.key === 'Enter') {
@@ -31,18 +33,18 @@ function sendMessage() {
         const combinedMessages = [];
         const maxLen = Math.max(userMessages.length, llmResponses.length);
         for (let i = 0; i < maxLen; i++) {
-            if (userMessages[i]) { combinedMessages.push('You: ' + userMessages[i] + '<chat_sep>');};
-            if (llmResponses[i]) { combinedMessages.push('LLM: ' + llmResponses[i] + '<chat_sep>');};
+            if (userMessages[i]) { combinedMessages.push('You: ' + userMessages[i] + SEP_TOKEN);};
+            if (llmResponses[i]) { combinedMessages.push('LLM: ' + llmResponses[i] + SEP_TOKEN);};
         }
         combinedMessages.push('You: ' + text); // Add current message
-        vscode.postMessage({ command: 'send', text: combinedMessages.join('\\n') }); // Send combined messages
+        vscode.postMessage({ command: 'send', text: combinedMessages.join('\n') }); // Send combined messages
     }
 
     if (fileInput.files.length > 0) {
         const reader = new FileReader();
         reader.onload = function (event) {
             const fileContent = event.target.result;
-            const finalMessage = input + "\\n\\n" + fileContent;
+            const finalMessage = input + "\n\n" + fileContent;
             sendToLLM(finalMessage);
             appendMessage(input + ' (with file content)', 'You');
         };
