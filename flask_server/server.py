@@ -9,11 +9,14 @@ import os
 import json
 import random
 import argparse
+import asyncio
 
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from utils import english_words
 from flask_server.hf_api import query_hf_api
+from chat.openai_chat import send_prompt_to_openai
+
 
 load_dotenv()
 
@@ -65,6 +68,20 @@ def upload_files():
             print(filename)
             print(content)
     return jsonify({'message': 'Files uploaded successfully'}), 200
+
+
+@app.route('/chat', methods=['POST'])
+def chat_with_llm():
+    """Chat with Language Model"""
+    data = request.get_json()
+    print(f"Data received at server: {data}")
+
+    # Extract prompt and model from the incoming request
+    prompt = data.get("prompt")
+    model = data.get("model", "gpt-3.5-turbo")
+
+    response, code = asyncio.run(send_prompt_to_openai(prompt, model))
+    return response, code
 
 
 if __name__ == "__main__":
