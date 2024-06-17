@@ -14,8 +14,8 @@ import asyncio
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from utils import english_words
-from flask_server.hf_api import query_hf_api
 from chat.openai_chat import send_prompt_to_openai
+from flask_server.hf_api import query_hf_api
 
 
 load_dotenv()
@@ -23,6 +23,7 @@ load_dotenv()
 query_llm_api = query_hf_api
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1000 * 1000  # 32 megabytes
+TEST_MODE = json.loads(os.getenv("FLASK_SERVER_TEST_MODE"))
 
 
 @app.route('/autocomplete', methods=['POST'])
@@ -35,8 +36,7 @@ def autocomplete():
     data = request.get_json()
     print(f"Data received at server {data}")
 
-    flask_server_test_mode = json.loads(os.getenv("FLASK_SERVER_TEST_MODE"))
-    if flask_server_test_mode:
+    if TEST_MODE:
         # gen random word for test mode
         rand_word = random.choice(english_words)
         resp = {"results": [{"text": rand_word}]}
@@ -78,9 +78,12 @@ def chat_with_llm():
 
     # Extract prompt and model from the incoming request
     prompt = data.get("prompt")
-    model = data.get("model", "gpt-3.5-turbo")
+    model = data.get("model", "gpt-3.5-turbo-0125")
 
-    response, code = asyncio.run(send_prompt_to_openai(prompt, model))
+    if TEST_MODE:
+        response, code = jsonify({"response": "sample response from llm"}), 200
+    else:
+        response, code = asyncio.run(send_prompt_to_openai(prompt, model))
     return response, code
 
 

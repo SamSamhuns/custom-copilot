@@ -15,7 +15,8 @@ Create a `.env` file inside `flask_server/` with the contents:
 
 ```conf
 HF_API_TOKEN=YOUR_HUGGINFACE_TOKEN
-# set the below to true to run on test mode & not call the huggingface API
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+# set the below to true to run on test mode & not call any LLM API
 FLASK_SERVER_TEST_MODE=false
 ```
 
