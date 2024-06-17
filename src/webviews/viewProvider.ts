@@ -21,7 +21,7 @@ export function getWebviewContent(webview: vscode.Webview, extensionUri: vscode.
         <div class="chat-container">
             <div id="messages" class="messages"></div>
             <div class="input-box">
-                <input type="text" id="userInput" placeholder="Type your message here" onkeydown="handleEnter(event)"/>
+                <textarea id="userInput" placeholder="Type your message here" onkeydown="handleKeyDown(event)"></textarea>
                 <input type="file" id="fileInput" />
                 <button onclick="sendMessage()">Send</button>
             </div>

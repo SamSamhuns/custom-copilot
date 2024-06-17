@@ -4,11 +4,16 @@ let llmResponses = [];
 const SEP_TOKEN = '<CHAT_SEP>';
 
 
-function handleEnter(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent form submission if part of a form
-        sendMessage();
+// handle key press down for the textarea input
+function handleKeyDown(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault(); // Prevent default Enter behavior which is to add a new line
+        if (document.getElementById('userInput').value.trim() !== '') {
+            sendMessage(); // Only send if there's something other than whitespace
+            document.getElementById('userInput').value = ''; // Clear the textarea after sending
+        }
     }
+    // If Shift+Enter is pressed, allow the default action of inserting a new line
 }
 
 function appendMessage(message, sender) {
