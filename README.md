@@ -1,8 +1,8 @@
-# custom-copilot README
+# custom-copilot
 
 Custom copilot for autocomplete functionality in your code with custom llm endpoints.
 
-- [custom-copilot README](#custom-copilot-readme)
+- [custom-copilot](#custom-copilot)
   - [Features](#features)
   - [Requirements](#requirements)
     - [Setting up Python Flask webserver for hosting API](#setting-up-python-flask-webserver-for-hosting-api)

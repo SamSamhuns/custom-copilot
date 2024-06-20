@@ -35,7 +35,7 @@
       },
       {
         "command": "custom-copilot.chatWithLLM",
-        "title": "Custom Copilot: Chat File with LLM"
+        "title": "Custom Copilot: Chat with LLM"
       }
     ],
     "configuration": {
@@ -59,7 +59,7 @@
         "custom-copilot.autocompleteModel": {
           "type": "string",
           "default": "starcoder2-3b",
-          "description": "Model used for autocomplete feature"
+          "description": "Model for autocomplete feature"
         },
         "custom-copilot.autocompleteAPIURL": {
           "type": "string",
