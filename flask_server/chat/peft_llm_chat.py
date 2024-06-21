@@ -16,7 +16,7 @@ if __name__ == "__main__":
     TEXT_PROMPT = "Write a function to calculate the l2 distance between two numbers"
     tknr, llm_model = get_tokenizer_and_model(
         MODEL_NAME, ADAPTER_MODEL_PATH, use_cuda=USE_CUDA)
-    
+
     t0 = time.time()
     print(send_prompt_to_llm(
         llm_model, tknr, TEXT_PROMPT, USE_CUDA, max_new_tokens=128))

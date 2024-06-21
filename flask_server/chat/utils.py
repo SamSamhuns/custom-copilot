@@ -6,7 +6,7 @@ pip install - -default-timeout = 100 transformers
 pip install - -default-timeout = 100 peft
 pip install setuptools
 """
-from typing import Tuple
+from typing import Tuple, List
 
 import torch
 import transformers
@@ -61,6 +61,26 @@ def get_tokenizer_and_model(
         model.cuda()
     model.eval()
     return tokenizer, model
+
+
+def conv_msgs_to_chat_fmt(messages: List[dict], fmt_type: str = "smangrul/code-chat-assistant-v1") -> str:
+    """
+    messages should be in format [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": PROMPT},
+        {"role": "assistant", "content": RESPONSE}, ...]
+    """
+    if fmt_type == "smangrul/code-chat-assistant-v1":
+        tkn_conv = {"system": "<|system|>",
+                    "user": "<|prompter|>",
+                    "assistant": "<|assistant|> "}
+        str_msgs = [tkn_conv[msg["role"]] + f' {msg["content"]} ' + "<|endoftext|> "
+                    for msg in messages]
+        prompt = "".join(str_msgs)
+    else:
+        raise NotADirectoryError(
+            f"{fmt_type} type for chat format not implemented")
+    return prompt
 
 
 def send_prompt_to_llm(
