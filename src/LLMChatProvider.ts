@@ -11,7 +11,12 @@ export class LLMCommunicator {
             const response = await fetch(config.chatWithLLMAPIURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, model: config.chatWithLLMModel })
+                body: JSON.stringify({
+                    prompt,
+                    model: config.chatWithLLMModel,
+                    max_tokens: config.chatWithLLMMaxTokens,
+                    temperature: config.chatWithLLMMaxTemperature
+                })
             });
 
             if (!response.ok) {

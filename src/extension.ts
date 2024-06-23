@@ -105,8 +105,6 @@ export function activate(context: vscode.ExtensionContext) {
 			async message => {
 				switch (message.command) {
 					case 'send':
-						const response = await LLMCommunicator.send(message.text);
-						console.log("Response from LLM:", response);
 						try {
 							const response = await LLMCommunicator.send(message.text);
 							panel.webview.postMessage({ command: 'response', text: response });
