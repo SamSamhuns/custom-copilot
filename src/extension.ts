@@ -1,7 +1,7 @@
 // main extension file
 import * as vscode from 'vscode';
 import { LLMInlineCompletionItemProvider } from "./LLMInlineCompletionItemProvider";
-import { uploadFolderToAPI, uploadFilesToAPI } from "./apiHandler";
+import { uploadFolderToAPI, uploadFilesToAPI } from "./fileApiHandler";
 import { LLMCommunicator } from "./LLMChatProvider";
 import { registerSettings } from "./settings";
 import { getWebviewContent } from "./webviews/viewProvider";
