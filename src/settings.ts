@@ -1,6 +1,8 @@
 // settings.ts
 import * as vscode from 'vscode';
 
+export const DEBUG_MODE = true;  // change this to false when publishing extension
+
 // Settings interface
 interface Settings {
     uploadAPIURL: string;
@@ -42,11 +44,12 @@ export const settings: Settings = {
     autocompleteInputMaxNewTokens: 50
 };
 
-export function registerSettings() {
-    const configuration = vscode.workspace.getConfiguration("custom-copilot");
+export function overrideSettings() {
+    console.log("Overriding settings from config");
+    const config = vscode.workspace.getConfiguration("custom-copilot");
     // Register settings and set defaults
     for (const key in settings) {
         const value = settings[key as keyof Settings];  // Using type assertion here
-        configuration.update(key, value, vscode.ConfigurationTarget.Global);
+        config.update(key, value, vscode.ConfigurationTarget.Global);
     }
 }

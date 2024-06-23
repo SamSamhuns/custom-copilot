@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { LLMInlineCompletionItemProvider } from "./LLMInlineCompletionItemProvider";
 import { uploadFolderToAPI, uploadFilesToAPI } from "./fileApiHandler";
 import { LLMCommunicator } from "./LLMChatProvider";
-import { registerSettings } from "./settings";
+import { DEBUG_MODE, overrideSettings } from "./settings";
 import { getWebviewContent } from "./webviews/viewProvider";
 
 
@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// The commandId parameter must match the command field in package.json
 
 	// register confs from settings.json into the vscode workspace. Need to rebuild for new settings to work
-	registerSettings();
+	if (DEBUG_MODE) { overrideSettings(); }
 
 	// This line of code will only be executed once when your extension is activated
 	console.log('Extension "custom-copilot" is now active');
