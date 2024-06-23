@@ -6,6 +6,8 @@ interface Settings {
     uploadAPIURL: string;
     chatWithLLMModel: string;
     chatWithLLMAPIURL: string;
+    chatWithLLMMaxTokens: number;
+    chatWithLLMMaxTemperature: number;
     autocompleteModel: string;
     autocompleteAPIURL: string;
     autocompleteDelay: number;
@@ -27,8 +29,12 @@ export const availableLLMModels: ModelCapabilities = {
 
 export const settings: Settings = {
     uploadAPIURL: 'http://localhost:8002/upload',
+
     chatWithLLMModel: 'gpt-3.5-turbo-0125',
     chatWithLLMAPIURL: 'http://localhost:8002/chat',
+    chatWithLLMMaxTokens: 150,
+    chatWithLLMMaxTemperature: 0.7,
+
     autocompleteModel: 'starcoder2-3b',
     autocompleteAPIURL: 'http://localhost:8002/autocomplete',
     autocompleteDelay: 1500, // in milliseconds

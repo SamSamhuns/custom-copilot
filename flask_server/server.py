@@ -79,11 +79,14 @@ def chat_with_llm():
     # Extract prompt and model from the incoming request
     prompt = data.get("prompt")
     model = data.get("model", "gpt-3.5-turbo-0125")
+    max_tokens = data.get("max_tokens", 150)
+    temperature = data.get("temperature", 0.7)
 
     if TEST_MODE:
         response, code = jsonify({"response": "sample response from llm"}), 200
     else:
-        response, code = asyncio.run(send_prompt_to_openai(prompt, model))
+        response, code = asyncio.run(
+            send_prompt_to_openai(prompt, model, max_tokens, temperature))
     return response, code
 
 

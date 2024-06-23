@@ -56,6 +56,16 @@
           "default": "http://localhost:8002/chat",
           "description": "URL for Chat with LLM API"
         },
+        "custom-copilot.chatWithLLMMaxTokens": {
+          "type": "integer",
+          "default": 150,
+          "description": "Maximum new tokens for chat with llm output"
+        },
+        "custom-copilot.chatWithLLMMaxTemperature": {
+          "type": "float",
+          "default": 0.7,
+          "description": "Temperature for chat llm output"
+        },
         "custom-copilot.autocompleteModel": {
           "type": "string",
           "default": "starcoder2-3b",
@@ -79,7 +89,7 @@
         "custom-copilot.autocompleteInputMaxNewTokens": {
           "type": "integer",
           "default": 75,
-          "description": "Maximum new tokens for autocomplete input"
+          "description": "Maximum new tokens for autocomplete output"
         }
       }
     }
