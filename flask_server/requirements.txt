@@ -1,4 +1,7 @@
 Flask==3.0.3
 openai==1.34.0
+peft==0.11.1
 python-dotenv==1.0.1
 requests==2.32.3
+tiktoken==0.7.0
+transformers==4.41.2
