@@ -9,3 +9,24 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+
+# python server files
+flask_server
+
+# all python-based files
+**/*.py
+**/*.pyc
+**/.env
+venv
+env
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# mac os system files
+**/*.DS_Store
