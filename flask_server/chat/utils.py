@@ -14,7 +14,8 @@ import transformers
 from peft import PeftModel
 from transformers import (
     AutoModelForCausalLM,
-    AutoTokenizer
+    AutoTokenizer,
+    BitsAndBytesConfig
 )
 
 
@@ -160,3 +161,23 @@ def send_prompt_to_llm(
             **kwargs
         )
     return tokenizer.batch_decode(outputs, skip_special_tokens=False)[0]
+
+
+if __name__ == "__main__":
+    # example 4bit quant run
+    MODEL_NAME = "bigcode/starcoder2-3b"
+    USE_CUDA = True
+    USE_CUDA = USE_CUDA and torch.cuda.is_available()
+    TEXT_PROMPT = "def print_hello_world():"
+
+    # 4bit quantization with BitsAndBytesConfig
+    quantization_config = BitsAndBytesConfig(load_in_4bit=True)
+    device = "cuda" if USE_CUDA else "cpu"  # for GPU usage or "cpu" for CPU usage
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+    model_4bit = AutoModelForCausalLM.from_pretrained(
+        MODEL_NAME, quantization_config=quantization_config)
+
+    inputs = tokenizer.encode(TEXT_PROMPT, return_tensors="pt").to(device)
+    outputs = model_4bit.generate(inputs)
+    print(tokenizer.decode(outputs[0]))
+    print(f"Memory footprint: {model_4bit.get_memory_footprint() / 1e6:.2f} MB")

@@ -1,5 +1,5 @@
 """
-Peft LLM model for Chat
+Peft LLM model for autocomplete
 """
 import time
 import torch
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     ADAPTER_MODEL_PATH = "flask_server/models/peft-lora-starcoder2-3b-chat-asst-T4-15GB-colab-epoch06/checkpoint-1212"
     USE_CUDA = True
     USE_CUDA = USE_CUDA and torch.cuda.is_available()
-    TEXT_PROMPT = "Write a function to calculate the l2 distance between two numbers"
+    TEXT_PROMPT = "def l2_distance(x, y):"
 
     tknr, llm_model = get_tokenizer_and_model(
         MODEL_NAME, ADAPTER_MODEL_PATH, use_cuda=USE_CUDA)
