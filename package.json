@@ -1,5 +1,6 @@
 {
   "name": "custom-copilot",
+  "publisher": "samsamhuns-github",
   "displayName": "custom_copilot",
   "description": "Custom Copilot enables code completion and generation with LLMs in vscode",
   "author": {
@@ -75,7 +76,7 @@
           "description": "Maximum new tokens for chat with llm output"
         },
         "custom-copilot.chatWithLLMMaxTemperature": {
-          "type": "float",
+          "type": "number",
           "default": 0.7,
           "description": "Temperature for chat llm output"
         },
