@@ -44,14 +44,14 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125"):
         tokens_per_message = 4
         tokens_per_name = -1  # if there's a name, the role is omitted
     elif "gpt-3.5-turbo" in model:
-        print("Warning: gpt-3.5-turbo may update over time. Returning num tokens assuming gpt-3.5-turbo-0125.")
+        print("Warning: gpt-3.5-turbo may update over time. Calc num tokens assuming gpt-3.5-turbo-0125.")
         return num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125")
     elif "gpt-4" in model:
-        print("Warning: gpt-4 may update over time. Returning num tokens assuming gpt-4-0613.")
+        print("Warning: gpt-4 may update over time. Calc num tokens assuming gpt-4-0613.")
         return num_tokens_from_messages(messages, model="gpt-4-0613")
     else:
         raise NotImplementedError(
-            f"""num_tokens_from_messages() is not implemented for model {model}. 
+            f"""num_tokens_from_messages() is not implemented for model {model}.
             See https://github.com/openai/openai-python/blob/main/chatml.md 
             for information on how messages are converted to tokens."""
         )
@@ -173,11 +173,11 @@ if __name__ == "__main__":
     # 4bit quantization with BitsAndBytesConfig
     quantization_config = BitsAndBytesConfig(load_in_4bit=True)
     device = "cuda" if USE_CUDA else "cpu"  # for GPU usage or "cpu" for CPU usage
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+    tknr = AutoTokenizer.from_pretrained(MODEL_NAME)
     model_4bit = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME, quantization_config=quantization_config)
 
-    inputs = tokenizer.encode(TEXT_PROMPT, return_tensors="pt").to(device)
-    outputs = model_4bit.generate(inputs)
-    print(tokenizer.decode(outputs[0]))
+    inputs = tknr.encode(TEXT_PROMPT, return_tensors="pt").to(device)
+    outs = model_4bit.generate(inputs)
+    print(tknr.decode(outs[0]))
     print(f"Memory footprint: {model_4bit.get_memory_footprint() / 1e6:.2f} MB")
