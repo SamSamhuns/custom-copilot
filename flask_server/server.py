@@ -5,6 +5,7 @@ HTTP ENDPOINT will be available at http://localhost:8002/test_api
 Ping with curl:
 curl -X POST http://localhost:8002/autocomplete -H "Content-Type: application/json" -d '{"prompt": "test", "max_new_tokens": 50}'
 """
+
 import os
 import json
 import random
@@ -22,11 +23,11 @@ load_dotenv()
 
 query_llm_api = query_hf_api
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 32 * 1000 * 1000  # 32 megabytes
+app.config["MAX_CONTENT_LENGTH"] = 32 * 1000 * 1000  # 32 megabytes
 TEST_MODE = json.loads(os.getenv("FLASK_SERVER_TEST_MODE"))
 
 
-@app.route('/autocomplete', methods=['POST'])
+@app.route("/autocomplete", methods=["POST"])
 def autocomplete():
     """
     Autocomplete based on data
@@ -44,10 +45,10 @@ def autocomplete():
         # query data to llm api
         output = query_llm_api(
             payload={
-                "inputs":  data["prompt"],
-                "parameters": {"max_new_tokens": data["max_new_tokens"]}
+                "inputs": data["prompt"],
+                "parameters": {"max_new_tokens": data["max_new_tokens"]},
             },
-            model=data["model"]
+            model=data["model"],
         )
         for out in output:
             out["text"] = out.pop("generated_text")
@@ -55,22 +56,22 @@ def autocomplete():
     return jsonify(resp), 200
 
 
-@app.route('/upload', methods=['POST'])
+@app.route("/upload", methods=["POST"])
 def upload_files():
     """Upload folder to server"""
-    files = request.files.getlist('files')
+    files = request.files.getlist("files")
     print(f"Received {len(files)} file(s)")
 
     for file in files:
         if file:
             filename = file.filename
-            content = file.read().decode('utf-8')
+            content = file.read().decode("utf-8")
             print(filename)
             print(content)
-    return jsonify({'message': 'Files uploaded successfully'}), 200
+    return jsonify({"message": "Files uploaded successfully"}), 200
 
 
-@app.route('/chat', methods=['POST'])
+@app.route("/chat", methods=["POST"])
 def chat_with_llm():
     """Chat with Language Model"""
     data = request.get_json()
@@ -86,13 +87,20 @@ def chat_with_llm():
         response, code = jsonify({"response": "sample response from llm"}), 200
     else:
         response, code = asyncio.run(
-            send_prompt_to_openai(prompt, model, max_tokens, temperature))
+            send_prompt_to_openai(prompt, model, max_tokens, temperature)
+        )
     return response, code
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Run flask webserver with api endpoints")
-    parser.add_argument("-p", "--port", dest="port", default=8002,
-                        type=int, help="Port to expose flask webserver")
+    parser.add_argument(
+        "-p",
+        "--port",
+        dest="port",
+        default=8002,
+        type=int,
+        help="Port to expose flask webserver",
+    )
     args = parser.parse_args()
-    app.run(debug=True, host='0.0.0.0', port=args.port)
+    app.run(debug=True, host="0.0.0.0", port=args.port)

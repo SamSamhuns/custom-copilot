@@ -6,17 +6,14 @@ pip install - -default-timeout = 100 transformers
 pip install - -default-timeout = 100 peft
 pip install setuptools
 """
+
 from typing import Tuple, List
 
 import torch
 import tiktoken
 import transformers
 from peft import PeftModel
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig
-)
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 
 def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125"):
@@ -35,7 +32,7 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125"):
         "gpt-4-0314",
         "gpt-4-32k-0314",
         "gpt-4-0613",
-        "gpt-4-32k-0613", 
+        "gpt-4-32k-0613",
     }:
         tokens_per_message = 3
         tokens_per_name = 1
@@ -44,10 +41,14 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125"):
         tokens_per_message = 4
         tokens_per_name = -1  # if there's a name, the role is omitted
     elif "gpt-3.5-turbo" in model:
-        print("Warning: gpt-3.5-turbo may update over time. Calc num tokens assuming gpt-3.5-turbo-0125.")
+        print(
+            "Warning: gpt-3.5-turbo may update over time. Calc num tokens assuming gpt-3.5-turbo-0125."
+        )
         return num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125")
     elif "gpt-4" in model:
-        print("Warning: gpt-4 may update over time. Calc num tokens assuming gpt-4-0613.")
+        print(
+            "Warning: gpt-4 may update over time. Calc num tokens assuming gpt-4-0613."
+        )
         return num_tokens_from_messages(messages, model="gpt-4-0613")
     else:
         raise NotImplementedError(
@@ -67,9 +68,8 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0125"):
 
 
 def load_lora_adapter(
-        model: torch.nn.Module,
-        adapter_model_path: str,
-        adapter_name: str = "chat") -> torch.nn.Module:
+    model: torch.nn.Module, adapter_model_path: str, adapter_name: str = "chat"
+) -> torch.nn.Module:
     """
     Load LORA adapter into huggingface LLM model
     model: torch.nn.Module
@@ -78,22 +78,22 @@ def load_lora_adapter(
     """
     print("Using lora adapter")
     model = PeftModel.from_pretrained(
-        model, model_id=adapter_model_path, adapter_name=adapter_name)
-    model.add_weighted_adapter([adapter_name], [0.8], "best_"+adapter_name)
-    model.set_adapter("best_"+adapter_name)
+        model, model_id=adapter_model_path, adapter_name=adapter_name
+    )
+    model.add_weighted_adapter([adapter_name], [0.8], "best_" + adapter_name)
+    model.set_adapter("best_" + adapter_name)
     model = model.merge_and_unload()
     return model
 
 
 def get_tokenizer_and_model(
-        model_name: str,
-        adapter_model_path: str,
-        adapter_name: str = "chat",
-        use_cuda: bool = True) -> Tuple[transformers.PreTrainedTokenizer, torch.nn.Module]:
+    model_name: str,
+    adapter_model_path: str,
+    adapter_name: str = "chat",
+    use_cuda: bool = True,
+) -> Tuple[transformers.PreTrainedTokenizer, torch.nn.Module]:
     """load base tokenizer and model"""
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_name,
-        trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
         quantization_config=None,
@@ -112,7 +112,9 @@ def get_tokenizer_and_model(
     return tokenizer, model
 
 
-def conv_msgs_to_chat_fmt(messages: List[dict], fmt_type: str = "smangrul/code-chat-assistant-v1") -> str:
+def conv_msgs_to_chat_fmt(
+    messages: List[dict], fmt_type: str = "smangrul/code-chat-assistant-v1"
+) -> str:
     """
     messages should be in format [
         {"role": "system", "content": "You are a helpful assistant."},
@@ -120,24 +122,28 @@ def conv_msgs_to_chat_fmt(messages: List[dict], fmt_type: str = "smangrul/code-c
         {"role": "assistant", "content": RESPONSE}, ...]
     """
     if fmt_type == "smangrul/code-chat-assistant-v1":
-        tkn_conv = {"system": "<|system|>",
-                    "user": "<|prompter|>",
-                    "assistant": "<|assistant|> "}
-        str_msgs = [tkn_conv[msg["role"]] + f' {msg["content"]} ' + "<|endoftext|> "
-                    for msg in messages]
+        tkn_conv = {
+            "system": "<|system|>",
+            "user": "<|prompter|>",
+            "assistant": "<|assistant|> ",
+        }
+        str_msgs = [
+            tkn_conv[msg["role"]] + f" {msg['content']} " + "<|endoftext|> "
+            for msg in messages
+        ]
         prompt = "".join(str_msgs)
     else:
-        raise NotADirectoryError(
-            f"{fmt_type} type for chat format not implemented")
+        raise NotADirectoryError(f"{fmt_type} type for chat format not implemented")
     return prompt
 
 
 def send_prompt_to_llm(
-        model: torch.nn.Module,
-        tokenizer: transformers.PreTrainedTokenizer,
-        prompt: str,
-        use_cuda: bool = True,
-        **kwargs) -> str:
+    model: torch.nn.Module,
+    tokenizer: transformers.PreTrainedTokenizer,
+    prompt: str,
+    use_cuda: bool = True,
+    **kwargs,
+) -> str:
     """
     Inference run with LLM (Model should be in eval mode)
     prompt: str = Text prompt for model
@@ -149,17 +155,14 @@ def send_prompt_to_llm(
         "top_k": 50,
         "top_p": 0.95,
         "do_sample": True,
-        "repetition_penalty": 1.0
+        "repetition_penalty": 1.0,
     }
     kwargs = default_args | kwargs
 
     input_ids = tokenizer(prompt, return_tensors="pt").input_ids
     input_ids = input_ids.cuda() if use_cuda else input_ids
     with torch.no_grad():
-        outputs = model.generate(
-            input_ids=input_ids,
-            **kwargs
-        )
+        outputs = model.generate(input_ids=input_ids, **kwargs)
     return tokenizer.batch_decode(outputs, skip_special_tokens=False)[0]
 
 
@@ -175,7 +178,8 @@ if __name__ == "__main__":
     device = "cuda" if USE_CUDA else "cpu"  # for GPU usage or "cpu" for CPU usage
     tknr = AutoTokenizer.from_pretrained(MODEL_NAME)
     model_4bit = AutoModelForCausalLM.from_pretrained(
-        MODEL_NAME, quantization_config=quantization_config)
+        MODEL_NAME, quantization_config=quantization_config
+    )
 
     inputs = tknr.encode(TEXT_PROMPT, return_tensors="pt").to(device)
     outs = model_4bit.generate(inputs)
